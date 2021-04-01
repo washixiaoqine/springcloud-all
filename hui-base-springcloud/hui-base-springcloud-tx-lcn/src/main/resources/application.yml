@@ -1,0 +1,58 @@
+server:
+  port: 28771
+spring:
+  application:
+    name: tx-lcn-server
+  redis:
+    host: 127.0.0.1
+    port: 6379
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: root
+    url: jdbc:mysql://127.0.0.1:3306/tx-manager?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false
+  cloud:
+    host: 127.0.0.1
+    port: 8500
+    consul:
+      discovery:
+        service-name: tx-lcn-server
+        health-check-path: /actuator/health
+        health-check-interval: 10s
+        prefer-ip-address: true
+        instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}:${random.value}
+#  mail:              # tx-lcn.manager.ex-url 事务异常通知邮箱需要配置的话打开此处
+#    host: smtp.qq.com
+#    port: 587
+#    username: xxxxx@**.com
+#    password: *********
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+    use-generated-keys: true
+
+logging:
+  level:
+    com.codingapi: DEBUG                                        # 分布式事务日志
+
+tx-lcn:
+  logger:
+    enabled: true    # 开启日志,默认为false
+  message:
+    netty:
+      attr-delay-time: 36000    # 参数延迟删除时间单位ms  默认为dtx-time值
+  manager:
+    host: 127.0.0.1         # TxManager Host Ip 默认为 127.0.0.1
+    heart-time: 300000      # 心跳检测时间(ms) 默认为 300000
+    dtx-time: 36000         # 分布式事务执行总时间(ms) 默认为36000
+    concurrent-level: 128   # 事务处理并发等级 默认为128
+    admin-key: codingapi    # 后台登陆密码，默认值为codingapi
+    dtx-lock-time: -1       # 分布式事务锁超时时间 默认为-1，当-1时会用tx-lcn.manager.dtx-time的时间
+    seq-len: 12             # 雪花算法的sequence位长度，默认为12位.
+    ex-url-enabled: false   # 异常回调开关
+#    ex-url: /provider/email-to/***@**.com     # 事务异常通知（任何http协议地址。未指定协议时，为TxManager提供的接口）
+  client:
+    tx-manager-delay: 2000       #该参数为tm下的配置，tc下忽略
+    tx-manager-heart: 2000       # 与客户端通讯的心跳时间
+

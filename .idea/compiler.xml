@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="hui-base-springcloud-api-gateway" />
+        <module name="hui-base-springcloud-discovery" />
+        <module name="hui-base-springcloud-tx-lcn" />
+        <module name="hui-base-springcloud-product-api" />
+        <module name="hui-base-springcloud-common" />
+        <module name="hui-base-springcloud-order-web" />
+        <module name="hui-base-springcloud-product-web" />
+        <module name="hui-base-springcloud-order-api" />
+        <module name="hui-base-springcloud-netty" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="hui-base-springcloud" target="1.8" />
+      <module name="hui-base-springcloud-api-gateway" target="1.8" />
+      <module name="hui-base-springcloud-common" target="1.8" />
+      <module name="hui-base-springcloud-discovery" target="1.8" />
+      <module name="hui-base-springcloud-netty" target="1.8" />
+      <module name="hui-base-springcloud-order" target="1.8" />
+      <module name="hui-base-springcloud-order-api" target="1.8" />
+      <module name="hui-base-springcloud-order-web" target="1.8" />
+      <module name="hui-base-springcloud-product" target="1.8" />
+      <module name="hui-base-springcloud-product-api" target="1.8" />
+      <module name="hui-base-springcloud-product-web" target="1.8" />
+      <module name="hui-base-springcloud-tx-lcn" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

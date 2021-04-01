@@ -1,0 +1,175 @@
+##server基础配置
+server:
+  port: 8181
+  servlet:
+    context-path: /order-service
+spring:
+  application:
+    name: order-service
+  profiles:
+    active: dev
+## 数据源
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: root
+    url: jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false
+    initialSize: 20
+    maxActive: 100
+    minIdle: 20
+    maxWait: 60000
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 30
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 30000
+    maxEvictableIdleTimeMillis: 60000
+    validationQuery: SELECT 1 FROM DUAL
+    testOnBorrow: false
+    testOnReturn: false
+    testWhileIdle: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+    filters: stat,wall
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    #    cluster:                                # 无中心 主从为1:1 的集群 打开此配置注掉上边单节点配置即可
+    #      nodes: 10.171.114.42:7000,10.171.114.42:7001,10.171.114.42:7002,10.171.114.42:7003,10.171.114.42:7004,10.171.114.42:7005
+    #      max-redirects: 3                      # 获取失败 最大重定向次数
+    lettuce:
+      pool:
+        max-active: 100                     #连接池最大连接数（使用负值表示没有限制） 默认为8
+        max-idle: 10                        # 连接池中的最大空闲连接 默认为8
+        min-idle: 5                         # 连接池中的最小空闲连接 默认为0
+        max-wait: -1                        # 连接池最大阻塞等待时间（使用负值表示没有限制） 默认为-1
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+  cloud:
+    ## consul配置
+    consul:
+      host: localhost    # consul服务器地址
+      port: 8500    # consul服务端口
+      # consul配置中心
+      config:
+        enabled: true
+        watch:    # watch选项为配置监视功能，主要监视配置的改变
+          enabled: true
+          delay: 10000
+          wait-time: 30
+        fail-fast: true    # 表示如果没有发现配置，是否抛出异常，true为是，false为否，当为false时，consul会打印warn级别的日志信息
+        format: yaml    # 表示使用的配置格式
+        #        prefix: config    # 配置所在的应用目录名称
+        name: ${spring.application.name}
+        data-key: data
+      # 服务发现配置
+      discovery:
+        service-name: ${spring.application.name}    # 服务名称
+        enabled: true    # 启用服务发现
+        register: true    # 启用服务注册
+        deregister: true    # 服务停止时取消注册
+        prefer-ip-address: true    # 注册时使用IP而不是hostname
+        health-check-interval: 10s    # 执行监控检查的频率
+        health-check-critical-timeout: 30s    # 设置健康检查失败多长时间后，取消注册
+        health-check-path: /${spring.application.name}/actuator/info    # 健康检查的路径
+        instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}:${random.value}    # 服务注册标识，格式为：应用名称+服务器IP+端口
+  # zip配置
+  zipkin:
+    base-url: http://localhost:28001          # zipkin server的请求地址
+    sender:
+      type: web       # web 客户端将踪迹日志数据通过网络请求的方式传送到服务端，另外还有配置 # kafka/rabbit 客户端将踪迹日志数据传递到mq进行中转
+  sleuth:
+    web:
+      client:
+        enabled: true
+    sampler:
+      probability: 1      # 采样率 1 代表100%全部采集 ，默认0.1 代表10% 的请求踪迹数据会被采集
+logging:
+  level:
+    com.hui.base.springcloud.*.mapper: DEBUG                    # mapper
+    com.hui.base.springcloud.*.api: DEBUG                       # feign
+    com.codingapi: DEBUG                                        # 分布式事务日志
+    org.springframework.web.servlet.DispatcherServlet: INFO    # 添加分布式链路追踪日志级别
+    org.springframework.cloud.sleuth: INFO
+#  config:
+#    classpath: logback-spring.xml
+
+#ribbon:
+#  MaxAutoRetries: 2 # 最大重试次数，当Eureka中可以找到服务，但是服务连不上时将会重试，如果eureka中找不到服务则直接走断路器
+#  MaxAutoRetriesNextServer: 3 # 切换实例的重试次数
+#  OkToRetryOnAllOperations: false  # 对所有操作请求都进行重试，如果是get则可以，如果是post，put等操作没有实现幂等的情况下是很危险的,所以设置为false
+#  ConnectTimeout: 5000  # 请求连接的超时时间
+#  ReadTimeout: 3000 # 请求处理的超时时间
+#  NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule #配置规则 随机
+
+# feign = ribbon + hystrix
+feign:
+  hystrix:
+    enabled: true   # 打开并使用hystrix的配置
+  client:
+    config:
+      default:
+        connectTimeout: 20000   # 建立连接超时时间 20s
+        readTimeout: 60000      # 请求处理的超时时间 60s   由ribbon和hystrix控制，这里的时间比ribbon的(重试次数*超时时间)长就可以
+        loggerLevel: full     # NONE，无日志记录（DEFAULT）; BASIC，仅记录请求方法和URL以及响应状态代码和执行时间。HEADERS，记录基本信息以及请求和响应头。FULL，记录请求和响应的标题，正文和元数据。
+  compression:
+    request:
+      enabled: true   # 配置请求GZIP压缩
+      mime-types: text/xml,application/xml,application/json   # 配置压缩支持的MIME TYP
+      min-request-size: 2048    # 单个请求包大小超过 2kb时进行压缩
+    response:
+      enabled: true   # 配置响应GZIP压缩
+
+#设置熔断器配置项
+hystrix:
+  command:
+    default:  # 默认配置
+      circuitBreaker:
+        enabled: true   # 启动断路器
+        requestVolumeThreshold: 10    # 熔断前最少请求次数
+        errorThresholdPercentage: 60    # 熔断前最少请求次数内错误率百分之60就会熔断
+        sleepWindowInMilliseconds: 10000    # 熔断重连时间10s（断路器打开的时候会进行计时，超过这个时间再访问仍然请求失败会继续熔断，并重新计时）
+      execution:
+        timeout:
+          enabled: true # 开启hystrix,为false将超时控制交给ribbon
+        isolation:
+          thread:
+            timeoutInMilliseconds: 10000  # 读超时时间  10s
+    hystrixTestX:   # 指定断路器 @HystrixCommand(commandKey = "hystrixTestX")
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 2000
+
+## tx-lcn-manager 配置
+tx-lcn:
+  client:
+    # tx-manager 的配置地址，多个用,分割 127.0.0.1:8070,127.0.0.1:8071 。注意设置上的地址在启动的时候会检查并连接，连接不成功会启动失败。
+    # tx-manager 下集群策略，当增加一个新的tx-manager后，tx-manager也会通知到其他的在线模块，然后tx-client会在连接上后面加入的模块。
+    manager-address: 127.0.0.1:8070
+    dtx-aspect-order: 0      # 该参数为事务方法注解切面的orderNumber，默认值为0.
+    resource-order: 0      # 该参数为事务连接资源方法切面的orderNumber，默认值为0.
+  ribbon:
+    loadbalancer:
+      dtx:
+        enabled: true     # springcloud feign 下开启负载均衡时的配置。开启后同一个事务组下相同的模块会重复调用。
+  springcloud:
+    loadbalance:
+      enabled: true      # 微服务集群且用到 LCN事务模式时，为保证性能请开启TX-LCN重写的负载策略。
+#  aspect:
+#    log:
+#      file-path: /Users/zhouyu/logs/.txlcn/${spring.application.name}-${server.port}    # 该参数是分布式事务框架存储的业务切面信息。采用h2数据库。日志在项目下根目录下。默认的为{user.dir}/.txlcn/{application.name}-{application.port}
+  logger:
+    enabled: true     # 是否开启日志记录。当开启以后需要配置对应logger的数据库连接配置信息。
+
+## 动态配置，可以不再这定义，直接定义在consul配置中心中，实时刷新
+dynamic-config:
+  name: name
+  address: address
+
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql

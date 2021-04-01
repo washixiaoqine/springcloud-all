@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hui.base.springcloud.order.mapper.OrderMapper">
+  <resultMap id="BaseResultMap" type="com.hui.base.springcloud.order.model.Order">
+    <id column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="order_name" jdbcType="VARCHAR" property="orderName" />
+    <result column="product_id" jdbcType="VARCHAR" property="productId" />
+    <result column="buy_quantity" jdbcType="INTEGER" property="buyQuantity" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    order_id, order_name, product_id, buy_quantity
+  </sql>
+</mapper>

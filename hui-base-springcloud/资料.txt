@@ -1,0 +1,127 @@
+版本简介
+  Greenwich SR.6
+  A-Z伦敦地铁
+
+  M(milestones)： 里程碑，M1表示第1个里程碑版本，一般同时标注PRE，表示预览版版。
+  RC(Release Candidate)： 候选版本，RC1表示第1个候选版本，即将要发布的版本。
+  SR(Service Release)： 已发布版本，SR1表示第1个正式版本，一般同时标注GA：(GenerallyAvailable),表示稳定版本。
+
+
+官网    https://spring.io/projects/spring-cloud/
+版本    https://github.com/spring-projects/spring-cloud/wiki/Spring-Cloud-Greenwich-Release-Notes
+中文文档 https://www.springcloud.cc/spring-cloud-greenwich.html
+lcn项目 https://github.com/codingapi/tx-lcn.git
+lcn文档 https://www.codingapi.com/docs/txlcn-setting-client/
+hui骨架 https://github.com/ithuhui/hui-base-springcloud
+consul https://learn.hashicorp.com/tutorials/consul/get-started-install?in=consul/getting-started
+zipkin https://zipkin.io/pages/quickstart.html
+
+
+Greenwich.SR6  springboot 2.1.x
+
+eureka         注册中心，18年7月不再维护
+Zookeeper      注册中心，替代eureka
+Consul         注册中心，较eureka更稳定，替代configserver，脱离bus实时刷新
+Config         动态刷新配置
+Sleuth         监控 zipkin
+Netflix        客户端负载均衡/断路器(降级熔断请求合并仓壁)   ribbon/hystrix
+Gateway        网关 请求转发，单机单网关时替代nginx，鉴权
+Stream         rabbitMQ和kafka的统一API，也可不用这个API
+Bus            基于stream，提供消息广播机制，常与configserver配合动态刷新各服务配置，但consul出现后这个用途消失
+Openfeign      聚合调用的接口代码
+
+Kubernetes     k8s，容器集群管理器
+Contract       Mock，测试用，不用起别的服务
+
+Vault          存加密数据
+Security       登陆认证
+Task           短生命周期的服务，不长时间启动
+Function       计算函数抽象处的云服务
+Cloudfoundry   pass平台
+Aws            亚马逊云服务器
+Gcp            谷歌的产品，国内不推荐
+
+
+
+
+命令
+consul启动 consul agent -dev   启动consul并开启开发模式, 开发时在本机上启动consul后可启动其它服务连接了
+zipkin启动 java -jar zipkin.jar --server.port=28001         启动zipkin
+rabbit启动 rabbitmq-server -detached
+
+consul version
+consul members      查看consul的成员身份
+consul leave        关闭consul
+
+
+控制路由
+consul控制页               http://localhost:8500
+TM管理页                   http://localhost:7970/admin/index.html      默认密码  codingapi
+MQ管理页                   http://localhost:15672                      默认账号密码  guest
+Sleuth/Z监控页             http://localhost:28001/zipkin               默认端口9411
+turbine监控页              http://localhost:29000/discovery-client/hystrix
+     hystrix监控接口       http://localhost:29000/order-service/actuator/hystrix.stream
+
+
+注解
+@EnableDiscoveryClient                    将当前服务注册到consul
+@EnableDistributedTransaction             开启分布式事务
+@EnableCircuitBreaker                     开启熔断
+@EnableFeignClients                       开启Feign
+@EnableConfigurationProperties            开启配置中心支持
+
+@HystrixCommand                           hystrix配置
+@FeignClient                              声明feign接口
+@TccTransaction                           tcc分布式事务
+@TxcTransaction                           txc分布式事务
+@LcnTransaction                           lcn分布式事务
+
+
+
+端口
+TM事务消息端口(其它客户端连接TM的端口)          8070
+redis                                      6379
+rabbitMQ                                   5672
+
+
+
+
+
+
+分布式事务
+ACID:原子性，一致性，隔离性，持久性
+分布式传播特性：需要将多个进程的事务关联达到原子性和一致性
+分布式隔离级别：数据提交后回滚前，其它线程可以看到已提交的数据，需要加锁或持有数据库连接控制
+
+XA协议：mysql，sqlserver，oracle支持XA协议
+
+lcn 2017年开源
+    事务管理器(TM)：事务中心，各个本地资源的提交和回滚
+    本地资源管理器(RM)：分散在各服务，参与事务管理中心的协调过程
+
+    传播特性解决：
+        TCC：补偿事务
+        2PC：两阶段提交，lcn用这种方式
+    隔离级别解决：
+        TCC：消息表，数据库可以不支持XA协议，每次更新都会查一次受影响数据，不占用数据库连接
+        TXC：逆向sql，数据库必须支持sql，支持XA协议，每次更新都会查一次受影响数据，不占用数据库连接，表没有主键需做处理
+        LCN：持有连接，服务执行完成后不提交，占有数据库连接到整个操作链结束
+
+seata 阿里维护2019年开源，社区活跃度是lcn的五倍，内部原名为Fescar
+    事务协调器(TC)：事务中心
+    事务管理器(TM)：在开始节点，负责全局事务的提交回滚
+    资源管理器(RM)：分散在各服务，参与事务管理中心的协调过程
+
+    传播特性解决：
+        TCC：补偿事务
+        2PC：两阶段提交，seats用这种方式
+    隔离级别解决：
+        TCC：消息表
+        AT：逆向sql，同TXC
+        SAGA：状态机引擎，有状态图编辑页，定义调用链的整个过程           http://seata.io/saga_designer/index.html#/
+
+
+
+
+
+

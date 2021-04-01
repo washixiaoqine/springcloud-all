@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/hui-base-springcloud/hui-base-springcloud.iml" filepath="$PROJECT_DIR$/hui-base-springcloud/hui-base-springcloud.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hui-base-springcloud/hui-base-springcloud-api-gateway/hui-base-springcloud-api-gateway.iml" filepath="$PROJECT_DIR$/hui-base-springcloud/hui-base-springcloud-api-gateway/hui-base-springcloud-api-gateway.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hui-base-springcloud/hui-base-springcloud-common/hui-base-springcloud-common.iml" filepath="$PROJECT_DIR$/hui-base-springcloud/hui-base-springcloud-common/hui-base-springcloud-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hui-base-springcloud/hui-base-springcloud-discovery/hui-base-springcloud-discovery.iml" filepath="$PROJECT_DIR$/hui-base-springcloud/hui-base-springcloud-discovery/hui-base-springcloud-discovery.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hui-base-springcloud/hui-base-springcloud-netty/hui-base-springcloud-netty.iml" filepath="$PROJECT_DIR$/hui-base-springcloud/hui-base-springcloud-netty/hui-base-springcloud-netty.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hui-base-springcloud/hui-base-springcloud-order/hui-base-springcloud-order.iml" filepath="$PROJECT_DIR$/hui-base-springcloud/hui-base-springcloud-order/hui-base-springcloud-order.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hui-base-springcloud/hui-base-springcloud-order/hui-base-springcloud-order-api/hui-base-springcloud-order-api.iml" filepath="$PROJECT_DIR$/hui-base-springcloud/hui-base-springcloud-order/hui-base-springcloud-order-api/hui-base-springcloud-order-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hui-base-springcloud/hui-base-springcloud-order/hui-base-springcloud-order-web/hui-base-springcloud-order-web.iml" filepath="$PROJECT_DIR$/hui-base-springcloud/hui-base-springcloud-order/hui-base-springcloud-order-web/hui-base-springcloud-order-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hui-base-springcloud/hui-base-springcloud-product/hui-base-springcloud-product.iml" filepath="$PROJECT_DIR$/hui-base-springcloud/hui-base-springcloud-product/hui-base-springcloud-product.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hui-base-springcloud/hui-base-springcloud-product/hui-base-springcloud-product-api/hui-base-springcloud-product-api.iml" filepath="$PROJECT_DIR$/hui-base-springcloud/hui-base-springcloud-product/hui-base-springcloud-product-api/hui-base-springcloud-product-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hui-base-springcloud/hui-base-springcloud-product/hui-base-springcloud-product-web/hui-base-springcloud-product-web.iml" filepath="$PROJECT_DIR$/hui-base-springcloud/hui-base-springcloud-product/hui-base-springcloud-product-web/hui-base-springcloud-product-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hui-base-springcloud/hui-base-springcloud-tx-lcn/hui-base-springcloud-tx-lcn.iml" filepath="$PROJECT_DIR$/hui-base-springcloud/hui-base-springcloud-tx-lcn/hui-base-springcloud-tx-lcn.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/hui-base-springcloud_237(1).iml" filepath="$PROJECT_DIR$/.idea/hui-base-springcloud_237(1).iml" />
+    </modules>
+  </component>
+</project>

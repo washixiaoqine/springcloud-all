@@ -1,0 +1,29 @@
+## server基础配置
+server:
+  port: 28000
+  servlet:
+    context-path: /discovery-client
+spring:
+  application:
+    name: discovery-client
+  cloud:
+    ## consul 配置
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        service-name: ${spring.application.name}
+        health-check-path: ${server.servlet.context-path}/actuator/health
+        health-check-interval: 10s
+        prefer-ip-address: true
+        enabled: true
+        instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}:${random.value}
+
+management:
+  server:
+    servlet:
+      context-path: /discovery
+  endpoints:
+    web:
+      exposure:
+        include: '*'
